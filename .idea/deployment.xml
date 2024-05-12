@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" autoUpload="Always" serverName="zhaozhonghua@192.168.0.3:22 password (4)" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
       <paths name="wangkuiyu@101.6.120.89:8102 key">
         <serverdata>
@@ -54,7 +54,7 @@
       <paths name="zhaozhonghua@192.168.0.3:22 password">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/capsnet" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
@@ -72,6 +72,14 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="zhaozhonghua@192.168.0.3:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/big-data/person/zhaozhonghua/capsnet" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

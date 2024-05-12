@@ -41,7 +41,9 @@ def marginLoss(y_true, y_pred):
     lbd = 0.5
     m_plus = 0.9
     m_minus = 0.1
-    
+
+    # y_true = tf.cast(y_true, tf.int32) #2024 05 11修改
+
     L = y_true * tf.square(tf.maximum(0., m_plus - y_pred)) + \
     lbd * (1 - y_true) * tf.square(tf.maximum(0., y_pred - m_minus))
 

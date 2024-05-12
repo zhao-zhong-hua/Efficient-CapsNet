@@ -242,24 +242,63 @@ class Mask(tf.keras.layers.Layer):
         if type(inputs) is list:
             if double_mask:
                 inputs, mask1, mask2 = inputs
+                print('1inputs shape:', inputs.shape)
+                print('1mask1 shape:', mask1.shape)
+                print('1mask2 shape:', mask2.shape)
             else:
                 inputs, mask = inputs
-        else:  
+                print('2inputs shape:', inputs.shape)
+                print('2mask shape:', mask.shape)
+        else:
             x = tf.sqrt(tf.reduce_sum(tf.square(inputs), -1))
+            print('3x shape:', x.shape)
             if double_mask:
                 mask1 = tf.keras.backend.one_hot(tf.argsort(x,direction='DESCENDING',axis=-1)[...,0],num_classes=x.get_shape().as_list()[1])
                 mask2 = tf.keras.backend.one_hot(tf.argsort(x,direction='DESCENDING',axis=-1)[...,1],num_classes=x.get_shape().as_list()[1])
+                print('4mask1 shape:', mask1.shape)
+                print('4mask2 shape:', mask2.shape)
             else:
                 mask = tf.keras.backend.one_hot(indices=tf.argmax(x, 1), num_classes=x.get_shape().as_list()[1])
+                print('5mask shape:', mask.shape)
 
         if double_mask:
             masked1 = tf.keras.backend.batch_flatten(inputs * tf.expand_dims(mask1, -1))
             masked2 = tf.keras.backend.batch_flatten(inputs * tf.expand_dims(mask2, -1))
+            print('6masked1 shape:', masked1.shape)
+            print('6masked2 shape:', masked2.shape)
             return masked1, masked2
         else:
-            masked = tf.keras.backend.batch_flatten(inputs * tf.expand_dims(mask, -1))
-            return masked
+            print('7mask shape',mask.shape)
+            print('7input shape',inputs.shape)
+            # masked = tf.keras.backend.batch_flatten(inputs * tf.expand_dims(mask, -1))
+            masked = tf.keras.backend.batch_flatten(inputs * tf.expand_dims(tf.expand_dims(mask, -1), 1))
+            # masked = tf.keras.backend.batch_flatten(inputs * mask)
 
+            print('7masked shape:', masked.shape)
+            return masked
+    # def call(self, inputs, double_mask=None, **kwargs):
+    #     if type(inputs) is list:
+    #         if double_mask:
+    #             inputs, mask1, mask2 = inputs
+    #         else:
+    #             inputs, mask = inputs
+    #     else:
+    #         x = tf.sqrt(tf.reduce_sum(tf.square(inputs), -1))
+    #         if double_mask:
+    #             mask1 = tf.keras.backend.one_hot(tf.argsort(x, direction='DESCENDING', axis=-1)[..., 0],
+    #                                              num_classes=tf.shape(x)[-2])
+    #             mask2 = tf.keras.backend.one_hot(tf.argsort(x, direction='DESCENDING', axis=-1)[..., 1],
+    #                                              num_classes=tf.shape(x)[-2])
+    #         else:
+    #             mask = tf.keras.backend.one_hot(indices=tf.argmax(x, -2), num_classes=tf.shape(x)[-2])
+    #
+    #     if double_mask:
+    #         masked1 = inputs * tf.expand_dims(mask1, -1)
+    #         masked2 = inputs * tf.expand_dims(mask2, -1)
+    #         return masked1, masked2
+    #     else:
+    #         masked = inputs * tf.expand_dims(mask, -1)
+    #         return masked
     def compute_output_shape(self, input_shape):
         if type(input_shape[0]) is tuple:  
             return tuple([None, input_shape[0][1] * input_shape[0][2]])
